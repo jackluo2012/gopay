@@ -8,7 +8,7 @@ import (
 	"encoding/base64"
 	"errors"
 	"fmt"
-	"github.com/milkbobo/gopay/common"
+	"github.com/jackluo2012/gopay/common"
 	"net/url"
 	"sort"
 	"strings"
@@ -41,7 +41,7 @@ func (this *AliWebClient) Pay(charge *common.Charge) (map[string]string, error) 
 	m["service"] = "create_direct_pay_by_user"
 	m["partner"] = this.PartnerID
 	m["_input_charset"] = "UTF-8"
-	m["notify_url"] = charge.CallbackURL
+	m["notify_url"] = this.CallbackURL
 	m["return_url"] = charge.ReturnURL // 注意链接不能有&符号，否则会签名错误
 	m["out_trade_no"] = charge.TradeNum
 	m["subject"] = TruncatedText(charge.Describe, 32)

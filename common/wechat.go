@@ -4,6 +4,7 @@ package common
 type WeChatReResult struct {
 	PrepayID string `xml:"prepay_id" json:"prepay_id,omitempty"`
 	CodeURL  string `xml:"code_url" json:"code_url,omitempty"`
+	MwebUrl  string `xml:"mweb_url" json:"mweb_url,omitempty"`
 }
 
 // WechatBaseResult 基本信息

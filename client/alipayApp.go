@@ -9,7 +9,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/milkbobo/gopay/common"
+	"github.com/jackluo2012/gopay/common"
 	"net/url"
 	"sort"
 	"strings"
@@ -19,10 +19,11 @@ import (
 var defaultAliAppClient *AliAppClient
 
 type AliAppClient struct {
-	SellerID   string //合作者ID
-	AppID      string // 应用ID
-	PrivateKey *rsa.PrivateKey
-	PublicKey  *rsa.PublicKey
+	SellerID    string //合作者ID
+	AppID       string // 应用ID
+	PrivateKey  *rsa.PrivateKey
+	PublicKey   *rsa.PublicKey
+	CallbackURL string
 }
 
 func InitAliAppClient(c *AliAppClient) {
@@ -43,7 +44,7 @@ func (this *AliAppClient) Pay(charge *common.Charge) (map[string]string, error) 
 	m["charset"] = "utf-8"
 	m["timestamp"] = time.Now().Format("2006-01-02 15:04:05")
 	m["version"] = "1.0"
-	m["notify_url"] = charge.CallbackURL
+	m["notify_url"] = this.CallbackURL
 	m["sign_type"] = "RSA"
 	bizContent["subject"] = TruncatedText(charge.Describe, 32)
 	bizContent["out_trade_no"] = charge.TradeNum

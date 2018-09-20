@@ -7,8 +7,8 @@ import (
 	"encoding/xml"
 	"errors"
 	"fmt"
-	"github.com/milkbobo/gopay/common"
-	"github.com/milkbobo/gopay/util"
+	"github.com/jackluo2012/gopay/common"
+	"github.com/jackluo2012/gopay/util"
 	"sort"
 	"strings"
 	"github.com/shopspring/decimal"
@@ -118,7 +118,6 @@ func PostWechat(url string, data map[string]string, h *HTTPSClient) (common.WeCh
 	} else {
 		hc = HTTPSC
 	}
-
 	re, err := hc.PostData(url, "text/xml:charset=UTF-8", xmlStr)
 	if err != nil {
 		return xmlRe, errors.New("HTTPSC.PostData: " + err.Error())

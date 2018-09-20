@@ -3,8 +3,8 @@ package client
 import (
 	"errors"
 	"fmt"
-	"github.com/milkbobo/gopay/common"
-	"github.com/milkbobo/gopay/util"
+	"github.com/jackluo2012/gopay/common"
+	"github.com/jackluo2012/gopay/util"
 	"strings"
 	"time"
 )
@@ -28,6 +28,7 @@ type WechatAppClient struct {
 	PrivateKey  []byte       // 私钥文件内容
 	PublicKey   []byte       // 公钥文件内容
 	httpsClient *HTTPSClient // 双向证书链接
+	CallbackURL string
 }
 
 // Pay 支付
@@ -40,7 +41,7 @@ func (this *WechatAppClient) Pay(charge *common.Charge) (map[string]string, erro
 	m["out_trade_no"] = charge.TradeNum
 	m["total_fee"] = WechatMoneyFeeToString(charge.MoneyFee)
 	m["spbill_create_ip"] = util.LocalIP()
-	m["notify_url"] = charge.CallbackURL
+	m["notify_url"] = this.CallbackURL
 	m["trade_type"] = "APP"
 	m["sign_type"] = "MD5"
 
