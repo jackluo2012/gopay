@@ -71,7 +71,7 @@ func (this *WechatMiniProgramClient) Pay(charge *common.Charge) (map[string]stri
 		return map[string]string{}, errors.New("WechatWeb: " + err.Error())
 	}
 	c["paySign"] = sign2
-	delete(c, "appId")
+//	delete(c, "appId")
 	return c, nil
 }
 
