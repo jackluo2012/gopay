@@ -73,6 +73,49 @@ func (this *WechatWebClient) Pay(charge *common.Charge) (map[string]string, erro
 	return c, nil
 }
 
+// Pay 支付
+func (this *WechatWebClient) H5Pay(charge *common.Charge, ip string) (map[string]string, error) {
+	var m = make(map[string]string)
+	m["appid"] = this.AppID
+	m["mch_id"] = this.MchID
+	m["nonce_str"] = util.RandomStr()
+	m["body"] = TruncatedText(charge.Describe, 32)
+	m["out_trade_no"] = charge.TradeNum
+	m["total_fee"] = WechatMoneyFeeToString(charge.MoneyFee)
+	m["spbill_create_ip"] = ip
+	m["notify_url"] = this.CallbackURL
+	m["trade_type"] = "MWEB"
+	m["openid"] = charge.OpenID
+	m["sign_type"] = "MD5"
+
+	sign, err := WechatGenSign(this.Key, m)
+	if err != nil {
+		return map[string]string{}, err
+	}
+	m["sign"] = sign
+
+	// 转出xml结构
+	xmlRe, err := PostWechat("https://api.mch.weixin.qq.com/pay/unifiedorder", m, nil)
+	if err != nil {
+		return map[string]string{}, err
+	}
+
+	var c = make(map[string]string)
+	c["appId"] = this.AppID
+	c["timeStamp"] = fmt.Sprintf("%d", time.Now().Unix())
+	c["nonceStr"] = util.RandomStr()
+	c["package"] = fmt.Sprintf("prepay_id=%s", xmlRe.PrepayID)
+	c["signType"] = "MD5"
+	c["mwebUrl"] = xmlRe.MwebUrl
+	sign2, err := WechatGenSign(this.Key, c)
+	if err != nil {
+		return map[string]string{}, errors.New("WechatWeb: " + err.Error())
+	}
+	c["paySign"] = sign2
+
+	return c, nil
+}
+
 // 支付到用户的微信账号
 func (this *WechatWebClient) PayToClient(charge *common.Charge) (map[string]string, error) {
 	return WachatCompanyChange(this.AppID, this.MchID, this.Key, this.httpsClient, charge)
