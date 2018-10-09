@@ -42,7 +42,7 @@ func (this *WechatWebClient) Pay(charge *common.Charge) (map[string]string, erro
 	m["spbill_create_ip"] = util.LocalIP()
 	m["notify_url"] = this.CallbackURL
 	m["trade_type"] = "MWEB"
-	m["openid"] = charge.OpenID
+//	m["openid"] = charge.OpenID
 	m["sign_type"] = "MD5"
 
 	sign, err := WechatGenSign(this.Key, m)
