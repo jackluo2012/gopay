@@ -37,6 +37,7 @@ func (this *WechatWebClient) Pay(charge *common.Charge) (map[string]string, erro
 	m["mch_id"] = this.MchID
 	m["nonce_str"] = util.RandomStr()
 	m["body"] = TruncatedText(charge.Describe, 32)
+	m["attach"] = charge.Attach
 	m["out_trade_no"] = charge.TradeNum
 	m["total_fee"] = WechatMoneyFeeToString(charge.MoneyFee)
 	m["spbill_create_ip"] = util.LocalIP()
@@ -85,7 +86,7 @@ func (this *WechatWebClient) H5Pay(charge *common.Charge, ip string) (map[string
 	m["spbill_create_ip"] = ip
 	m["notify_url"] = this.CallbackURL
 	m["trade_type"] = "MWEB"
-//	m["openid"] = charge.OpenID
+	//	m["openid"] = charge.OpenID
 	m["sign_type"] = "MD5"
 	m["scene_info"] = `{"h5_info": {"type":"Wap","wap_url": "https://api.shop.tfaqg.com","wap_name": "智橙互动充值"}}`
 

@@ -1,7 +1,5 @@
 package common
 
-import ()
-
 // PayClient 支付客户端接口
 type PayClient interface {
 	// 用户下单付款
@@ -24,6 +22,7 @@ type Charge struct {
 	OpenID      string  `json:"openid,omitempty"`
 	CheckName   bool    `json:"check_name,omitempty"`
 	ReUserName  string  `json:"re_user_name,omitempty"`
+	Attach      string  `json:"attach,omitempty"`
 }
 
 //PayCallback 支付返回

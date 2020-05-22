@@ -9,11 +9,12 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/jackluo2012/gopay/common"
 	"net/url"
 	"sort"
 	"strings"
 	"time"
+
+	"github.com/jackluo2012/gopay/common"
 )
 
 var defaultAliAppClient *AliAppClient
@@ -42,6 +43,7 @@ func (this *AliAppClient) Pay(charge *common.Charge) (map[string]string, error) 
 	m["method"] = "alipay.trade.app.pay"
 	m["format"] = "JSON"
 	m["charset"] = "utf-8"
+	m["passback_params"] = charge.Attach //支付宝要进行url.encode编码，先直接试试，不行，再来改
 	m["timestamp"] = time.Now().Format("2006-01-02 15:04:05")
 	m["version"] = "1.0"
 	m["notify_url"] = this.CallbackURL

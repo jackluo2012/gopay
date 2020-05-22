@@ -3,9 +3,10 @@ package client
 import (
 	"errors"
 	"fmt"
+	"time"
+
 	"github.com/jackluo2012/gopay/common"
 	"github.com/jackluo2012/gopay/util"
-	"time"
 )
 
 var defaultWechatMiniProgramClient *WechatMiniProgramClient
@@ -44,6 +45,7 @@ func (this *WechatMiniProgramClient) Pay(charge *common.Charge) (map[string]stri
 	m["total_fee"] = WechatMoneyFeeToString(charge.MoneyFee)
 	m["spbill_create_ip"] = util.LocalIP()
 	m["notify_url"] = this.CallbackURL
+	m["attach"] = charge.Attach
 	m["trade_type"] = "JSAPI"
 	m["openid"] = charge.OpenID
 	m["sign_type"] = "MD5"
@@ -71,7 +73,7 @@ func (this *WechatMiniProgramClient) Pay(charge *common.Charge) (map[string]stri
 		return map[string]string{}, errors.New("WechatWeb: " + err.Error())
 	}
 	c["paySign"] = sign2
-//	delete(c, "appId")
+	//	delete(c, "appId")
 	return c, nil
 }
 

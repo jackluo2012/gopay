@@ -3,10 +3,11 @@ package client
 import (
 	"errors"
 	"fmt"
-	"github.com/jackluo2012/gopay/common"
-	"github.com/jackluo2012/gopay/util"
 	"strings"
 	"time"
+
+	"github.com/jackluo2012/gopay/common"
+	"github.com/jackluo2012/gopay/util"
 )
 
 var defaultWechatAppClient *WechatAppClient
@@ -37,6 +38,7 @@ func (this *WechatAppClient) Pay(charge *common.Charge) (map[string]string, erro
 	m["appid"] = this.AppID
 	m["mch_id"] = this.MchID
 	m["nonce_str"] = util.RandomStr()
+	m["attach"] = charge.Attach
 	m["body"] = TruncatedText(charge.Describe, 32)
 	m["out_trade_no"] = charge.TradeNum
 	m["total_fee"] = WechatMoneyFeeToString(charge.MoneyFee)
